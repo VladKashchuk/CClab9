@@ -1,0 +1,282 @@
+Microsoft Windows [Version 10.0.19041.685]
+(c) Корпорація Майкрософт (Microsoft Corporation), 2020. Усі права захищені.
+
+C:\Users\Користувач>aws ecs create-cluster --cluster-name fargate-cluster
+{
+    "cluster": {
+        "clusterArn": "arn:aws:ecs:us-east-1:331355251771:cluster/fargate-cluster",
+        "clusterName": "fargate-cluster",
+        "status": "ACTIVE",
+        "registeredContainerInstancesCount": 0,
+        "runningTasksCount": 0,
+        "pendingTasksCount": 0,
+        "activeServicesCount": 0,
+        "statistics": [],
+        "tags": [],
+        "settings": [
+            {
+                "name": "containerInsights",
+                "value": "disabled"
+            }
+        ],
+        "capacityProviders": [],
+        "defaultCapacityProviderStrategy": []
+    }
+}
+
+
+C:\Users\Користувач>aws ecs register-task-definition --cli-input-json file://fargate-task.json
+{
+    "taskDefinition": {
+        "taskDefinitionArn": "arn:aws:ecs:us-east-1:331355251771:task-definition/sample-fargate:3",
+        "containerDefinitions": [
+            {
+                "name": "fargate-app",
+                "image": "httpd:2.4",
+                "cpu": 0,
+                "portMappings": [
+                    {
+                        "containerPort": 80,
+                        "hostPort": 80,
+                        "protocol": "tcp"
+                    }
+                ],
+                "essential": true,
+                "entryPoint": [
+                    "sh",
+                    "-c"
+                ],
+                "command": [
+                    "/bin/sh -c \"echo '<html> <head> <title>Amazon ECS Sample App</title> <style>body {margin-top: 40px; background-color: #333;} </style> </head><body> <div style=color:white;text-align:center> <h1>Amazon ECS Sample App</h1> <h2>Congratulations!</h2> <p>Your application is now running on a container in Amazon ECS.</p> </div></body></html>' >  /usr/local/apache2/htdocs/index.html && httpd-foreground\""
+                ],
+                "environment": [],
+                "mountPoints": [],
+                "volumesFrom": []
+            }
+        ],
+        "family": "sample-fargate",
+        "networkMode": "awsvpc",
+        "revision": 3,
+        "volumes": [],
+        "status": "ACTIVE",
+        "requiresAttributes": [
+            {
+                "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+            },
+            {
+                "name": "ecs.capability.task-eni"
+            }
+        ],
+        "placementConstraints": [],
+        "compatibilities": [
+            "EC2",
+            "FARGATE"
+        ],
+        "requiresCompatibilities": [
+            "FARGATE"
+        ],
+        "cpu": "256",
+        "memory": "512"
+    }
+}
+
+
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>aws ecs list-task-definitions
+{
+    "taskDefinitionArns": [
+        "arn:aws:ecs:us-east-1:331355251771:task-definition/sample-fargate:1",
+        "arn:aws:ecs:us-east-1:331355251771:task-definition/sample-fargate:2",
+        "arn:aws:ecs:us-east-1:331355251771:task-definition/sample-fargate:3"
+    ]
+}
+
+
+C:\Users\Користувач>aws ecs create-service --cluster fargate-cluster --service-name fargate-service --task-definition sample-fargate:1 --desired-count 1 --launch-type "FARGATE" --network-configuration "awsvpcConfiguration={subnets=[subnet-0393b0fa629c46f95],securityGroups=[sg-0f598acc0ff0c0473],assignPublicIp=ENABLED}"
+{
+    "service": {
+        "serviceArn": "arn:aws:ecs:us-east-1:331355251771:service/fargate-cluster/fargate-service",
+        "serviceName": "fargate-service",
+        "clusterArn": "arn:aws:ecs:us-east-1:331355251771:cluster/fargate-cluster",
+        "loadBalancers": [],
+        "serviceRegistries": [],
+        "status": "ACTIVE",
+        "desiredCount": 1,
+        "runningCount": 0,
+        "pendingCount": 0,
+        "launchType": "FARGATE",
+        "platformVersion": "LATEST",
+        "taskDefinition": "arn:aws:ecs:us-east-1:331355251771:task-definition/sample-fargate:1",
+        "deploymentConfiguration": {
+            "maximumPercent": 200,
+            "minimumHealthyPercent": 100
+        },
+        "deployments": [
+            {
+                "id": "ecs-svc/6255945850343487104",
+                "status": "PRIMARY",
+                "taskDefinition": "arn:aws:ecs:us-east-1:331355251771:task-definition/sample-fargate:1",
+                "desiredCount": 1,
+                "pendingCount": 0,
+                "runningCount": 0,
+                "createdAt": "2020-12-12T13:17:32.742000+02:00",
+                "updatedAt": "2020-12-12T13:17:32.742000+02:00",
+                "launchType": "FARGATE",
+                "platformVersion": "1.3.0",
+                "networkConfiguration": {
+                    "awsvpcConfiguration": {
+                        "subnets": [
+                            "subnet-0393b0fa629c46f95"
+                        ],
+                        "securityGroups": [
+                            "sg-0f598acc0ff0c0473"
+                        ],
+                        "assignPublicIp": "ENABLED"
+                    }
+                }
+            }
+        ],
+        "roleArn": "arn:aws:iam::331355251771:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS",
+        "events": [],
+        "createdAt": "2020-12-12T13:17:32.742000+02:00",
+        "placementConstraints": [],
+        "placementStrategy": [],
+        "networkConfiguration": {
+            "awsvpcConfiguration": {
+                "subnets": [
+                    "subnet-0393b0fa629c46f95"
+                ],
+                "securityGroups": [
+                    "sg-0f598acc0ff0c0473"
+                ],
+                "assignPublicIp": "ENABLED"
+            }
+        },
+        "schedulingStrategy": "REPLICA",
+        "createdBy": "arn:aws:iam::331355251771:user/myUser1",
+        "enableECSManagedTags": false,
+        "propagateTags": "NONE"
+    }
+}
+
+
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>aws ecs list-services --cluster fargate-cluster
+{
+    "serviceArns": [
+        "arn:aws:ecs:us-east-1:331355251771:service/fargate-cluster/fargate-service"
+    ]
+}
+
+
+C:\Users\Користувач>aws ecs describe-services --cluster fargate-cluster --services fargate-service
+{
+    "services": [
+        {
+            "serviceArn": "arn:aws:ecs:us-east-1:331355251771:service/fargate-cluster/fargate-service",
+            "serviceName": "fargate-service",
+            "clusterArn": "arn:aws:ecs:us-east-1:331355251771:cluster/fargate-cluster",
+            "loadBalancers": [],
+            "serviceRegistries": [],
+            "status": "ACTIVE",
+            "desiredCount": 1,
+            "runningCount": 1,
+            "pendingCount": 0,
+            "launchType": "FARGATE",
+            "platformVersion": "LATEST",
+            "taskDefinition": "arn:aws:ecs:us-east-1:331355251771:task-definition/sample-fargate:1",
+            "deploymentConfiguration": {
+                "maximumPercent": 200,
+                "minimumHealthyPercent": 100
+            },
+            "deployments": [
+                {
+                    "id": "ecs-svc/6255945850343487104",
+                    "status": "PRIMARY",
+                    "taskDefinition": "arn:aws:ecs:us-east-1:331355251771:task-definition/sample-fargate:1",
+                    "desiredCount": 1,
+                    "pendingCount": 0,
+                    "runningCount": 1,
+                    "createdAt": "2020-12-12T13:17:32.742000+02:00",
+                    "updatedAt": "2020-12-12T13:18:08.744000+02:00",
+                    "launchType": "FARGATE",
+                    "platformVersion": "1.3.0",
+                    "networkConfiguration": {
+                        "awsvpcConfiguration": {
+                            "subnets": [
+                                "subnet-0393b0fa629c46f95"
+                            ],
+                            "securityGroups": [
+                                "sg-0f598acc0ff0c0473"
+                            ],
+                            "assignPublicIp": "ENABLED"
+                        }
+                    }
+                }
+            ],
+            "roleArn": "arn:aws:iam::331355251771:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS",
+            "events": [
+                {
+                    "id": "502e8b01-9a33-4457-86ae-014b92ce5e56",
+                    "createdAt": "2020-12-12T13:18:08.752000+02:00",
+                    "message": "(service fargate-service) has reached a steady state."
+                },
+                {
+                    "id": "04e2bf55-6698-44d8-a215-fe9746740185",
+                    "createdAt": "2020-12-12T13:18:08.751000+02:00",
+                    "message": "(service fargate-service) (deployment ecs-svc/6255945850343487104) deployment completed."
+                },
+                {
+                    "id": "45dac06f-04d4-4127-b103-af60b1d7dd9a",
+                    "createdAt": "2020-12-12T13:17:39.120000+02:00",
+                    "message": "(service fargate-service) has started 1 tasks: (task 1b794a03fb2047ec95b8b904d8c50bdf)."                }
+            ],
+            "createdAt": "2020-12-12T13:17:32.742000+02:00",
+            "placementConstraints": [],
+            "placementStrategy": [],
+            "networkConfiguration": {
+                "awsvpcConfiguration": {
+                    "subnets": [
+                        "subnet-0393b0fa629c46f95"
+                    ],
+                    "securityGroups": [
+                        "sg-0f598acc0ff0c0473"
+                    ],
+                    "assignPublicIp": "ENABLED"
+                }
+            },
+            "schedulingStrategy": "REPLICA",
+            "createdBy": "arn:aws:iam::331355251771:user/myUser1",
+            "enableECSManagedTags": false,
+            "propagateTags": "NONE"
+        }
+    ],
+    "failures": []
+}
+
+
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
+C:\Users\Користувач>
